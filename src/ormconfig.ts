@@ -1,5 +1,6 @@
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { RoleEntity } from './roles/role.entity';
+import { AddRoles1676409092218 } from './migrations/1676409092218-AddRoles';
 
 const ormConfig: PostgresConnectionOptions = {
   type: 'postgres',
@@ -9,7 +10,8 @@ const ormConfig: PostgresConnectionOptions = {
   password: 'root',
   database: 'support_users_db',
   entities: [RoleEntity],
-  synchronize: true,
+  synchronize: false,
+  migrations: [AddRoles1676409092218],
 };
 
 export default ormConfig;
