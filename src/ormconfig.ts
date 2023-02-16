@@ -1,6 +1,7 @@
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { RoleEntity } from './roles/role.entity';
-import { AddRoles1676409092218 } from './migrations/1676409092218-AddRoles';
+import { UserEntity } from './users/user.entity';
+import { CreateUserAndRole1676579516754 } from './migrations/1676579516754-CreateUserAndRole';
 
 const ormConfig: PostgresConnectionOptions = {
   type: 'postgres',
@@ -9,9 +10,9 @@ const ormConfig: PostgresConnectionOptions = {
   username: 'support_user',
   password: 'root',
   database: 'support_users_db',
-  entities: [RoleEntity],
+  entities: [RoleEntity, UserEntity],
   synchronize: false,
-  migrations: [AddRoles1676409092218],
+  migrations: [CreateUserAndRole1676579516754],
 };
 
 export default ormConfig;
