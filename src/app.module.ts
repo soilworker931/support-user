@@ -3,18 +3,12 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import ormConfig from './ormconfig';
-import { RoleModule } from './roles/role.module';
 import { UserModule } from './users/user.module';
 import { AuthMiddleware } from './users/middlewares/auth.middleware';
 import { TicketModule } from './ticket/ticket.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(ormConfig),
-    RoleModule,
-    UserModule,
-    TicketModule,
-  ],
+  imports: [TypeOrmModule.forRoot(ormConfig), UserModule, TicketModule],
   controllers: [AppController],
   providers: [AppService],
 })

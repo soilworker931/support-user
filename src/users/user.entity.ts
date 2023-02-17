@@ -8,6 +8,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { UserRole } from './types/userRole.enum';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -25,6 +26,9 @@ export class UserEntity {
 
   @Column()
   phoneNumber: string;
+
+  @Column({ type: 'enum', enum: UserRole, default: 'Client' })
+  role: UserRole;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

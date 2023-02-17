@@ -1,5 +1,4 @@
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
-import { SeedRoles1676409092218 } from './seeds/1676409092218-AddRoles';
 
 const ormSeedConfig: PostgresConnectionOptions = {
   type: 'postgres',
@@ -10,7 +9,7 @@ const ormSeedConfig: PostgresConnectionOptions = {
   database: 'support_users_db',
   entities: [],
   synchronize: false,
-  migrations: [SeedRoles1676409092218],
+  migrations: [],
 };
 
 export default ormSeedConfig;
