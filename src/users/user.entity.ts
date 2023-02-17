@@ -1,9 +1,11 @@
 import { hash } from 'bcrypt';
+import { TicketEntity } from 'src/ticket/ticket.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -26,6 +28,9 @@ export class UserEntity {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
+
+  @OneToMany(() => TicketEntity, (ticket) => ticket.reporter)
+  tickets: TicketEntity[];
 
   @BeforeInsert()
   async registerUser(): Promise<void> {
