@@ -1,3 +1,6 @@
 import { UserEntity } from '../user.entity';
 
-export type UserType = Omit<UserEntity, 'password' | 'registerUser'>;
+export type UserType = Omit<
+  UserEntity,
+  'password' | 'registerUser' | 'updateUser'
+>;

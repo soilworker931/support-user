@@ -1,5 +1,11 @@
 import { hash } from 'bcrypt';
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -28,5 +34,15 @@ export class UserEntity {
       this.password,
       Number(process.env.PASSWORD_SALT),
     );
+  }
+
+  @BeforeUpdate()
+  async updateUser(): Promise<void> {
+    if (this.password) {
+      this.password = await hash(
+        this.password,
+        Number(process.env.PASSWORD_SALT),
+      );
+    }
   }
 }
