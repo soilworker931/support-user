@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { RegisterUserDto } from './dto/registerUser.dto';
 import { IUserResponse } from './types/userResponse.interface';
 import { sign } from 'jsonwebtoken';
+import { LoginUserDto } from './dto/loginUser.dto';
+import { compare } from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -22,13 +24,13 @@ export class UserService {
     });
     if (userByUsername) {
       throw new HttpException(
-        'This username already exists',
+        `${registerUserDto.username} name is already taken`,
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
     if (userByEmail) {
       throw new HttpException(
-        'This email already exists',
+        `${registerUserDto.username} email is already taken`,
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
@@ -37,7 +39,29 @@ export class UserService {
     return await this.userRepository.save(newUser);
   }
 
+  async loginUser(loginUserDto: LoginUserDto): Promise<UserEntity> {
+    const user = await this.userRepository.findOneBy({
+      email: loginUserDto.email,
+    });
+    if (!user) {
+      throw new HttpException(
+        `${loginUserDto.email} user does not exist`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    const isPasswordValid = await compare(loginUserDto.password, user.password);
+    if (!isPasswordValid) {
+      throw new HttpException(
+        `Incorrect password`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    return user;
+  }
+
   buildUserResponse(user: UserEntity): IUserResponse {
+    delete user.createdAt;
+    delete user.password;
     return {
       user: {
         ...user,
