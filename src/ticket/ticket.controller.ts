@@ -16,6 +16,7 @@ import { ITicketResponse } from './types/ticketResponse.interface';
 import { AuthGuard } from 'src/users/guards/auth.guard';
 import { ITicketsResponse } from './types/ticketsResponse.interface';
 import { UpdateTicketStatusDto } from './dto/updateTicketStatus.dto';
+import { AdminGuard } from 'src/users/guards/admin.guard';
 
 @Controller('tickets')
 export class TicketController {
@@ -46,7 +47,7 @@ export class TicketController {
 
   @Put()
   @UsePipes(new ValidationPipe())
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   async updateTicketStatus(
     @Body('ticket') updateTicketStatusDto: UpdateTicketStatusDto,
   ): Promise<ITicketResponse> {
