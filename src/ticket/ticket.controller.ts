@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -14,6 +15,7 @@ import { User } from 'src/users/decorators/user.decorator';
 import { ITicketResponse } from './types/ticketResponse.interface';
 import { AuthGuard } from 'src/users/guards/auth.guard';
 import { ITicketsResponse } from './types/ticketsResponse.interface';
+import { UpdateTicketStatusDto } from './dto/updateTicketStatus.dto';
 
 @Controller('tickets')
 export class TicketController {
@@ -40,5 +42,16 @@ export class TicketController {
     @User('id') currentUserId: number,
   ): Promise<ITicketsResponse> {
     return await this.ticketService.getTickets(currentUserId);
+  }
+
+  @Put()
+  @UseGuards(AuthGuard)
+  async updateTicketStatus(
+    @Body('ticket') updateTicketStatusDto: UpdateTicketStatusDto,
+  ): Promise<ITicketResponse> {
+    const ticket = await this.ticketService.updateTicketStatus(
+      updateTicketStatusDto,
+    );
+    return this.ticketService.buildTicketResponse(ticket);
   }
 }
