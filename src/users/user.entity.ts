@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserRole } from './types/userRole.enum';
+import { MessageEntity } from 'src/messages/message.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -35,6 +36,9 @@ export class UserEntity {
 
   @OneToMany(() => TicketEntity, (ticket) => ticket.reporter)
   tickets: TicketEntity[];
+
+  @OneToMany(() => MessageEntity, (message) => message.id)
+  messages: MessageEntity;
 
   @BeforeInsert()
   async registerUser(): Promise<void> {

@@ -6,9 +6,15 @@ import ormConfig from './ormconfig';
 import { UserModule } from './users/user.module';
 import { AuthMiddleware } from './users/middlewares/auth.middleware';
 import { TicketModule } from './ticket/ticket.module';
+import { MessageModule } from './messages/message.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(ormConfig), UserModule, TicketModule],
+  imports: [
+    TypeOrmModule.forRoot(ormConfig),
+    UserModule,
+    TicketModule,
+    MessageModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

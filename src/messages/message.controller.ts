@@ -1,0 +1,27 @@
+import {
+  Body,
+  Controller,
+  Post,
+  UseGuards,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
+import { AuthGuard } from 'src/users/guards/auth.guard';
+import { MessageService } from './message.service';
+import { User } from 'src/users/decorators/user.decorator';
+import { SendMessageDto } from './dto/sendMessage.dto';
+
+@Controller('message')
+export class MessageController {
+  constructor(private readonly messageService: MessageService) {}
+
+  @Post()
+  @UsePipes(new ValidationPipe())
+  @UseGuards(AuthGuard)
+  async sendMessage(
+    @User('id') currentUserId: number,
+    @Body('message') sendMessageDto: SendMessageDto,
+  ) {
+    return await this.messageService.sendMessage(currentUserId, sendMessageDto);
+  }
+}
