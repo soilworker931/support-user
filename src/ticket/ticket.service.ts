@@ -6,14 +6,16 @@ import { CreateTicketDto } from './dto/createTicket.dto';
 import { UserEntity } from 'src/users/user.entity';
 import { ITicketResponse } from './types/ticketResponse.interface';
 import { ITicketsResponse } from './types/ticketsResponse.interface';
-import { TicketStatus } from './types/ticketStatus.enum';
 import { UpdateTicketStatusDto } from './dto/updateTicketStatus.dto';
+import { UserRole } from 'src/users/types/userRole.enum';
 
 @Injectable()
 export class TicketService {
   constructor(
     @InjectRepository(TicketEntity)
     private readonly ticketRepository: Repository<TicketEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
     private dataSource: DataSource,
   ) {}
 
@@ -29,12 +31,16 @@ export class TicketService {
   }
 
   async getTickets(currentUserId: number): Promise<ITicketsResponse> {
+    const { role } = await this.userRepository.findOneBy({ id: currentUserId });
+
     const queryBuilder = this.dataSource
       .getRepository(TicketEntity)
       .createQueryBuilder('tickets')
       .leftJoinAndSelect('tickets.reporter', 'reporter');
 
-    queryBuilder.andWhere('tickets.reporterId = :id', { id: currentUserId });
+    if (role === UserRole.CLIENT) {
+      queryBuilder.andWhere('tickets.reporterId = :id', { id: currentUserId });
+    }
 
     const ticketsCount = await queryBuilder.getCount();
     const tickets = await queryBuilder.getMany();
