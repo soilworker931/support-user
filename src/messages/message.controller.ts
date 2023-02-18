@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   UseGuards,
   UsePipes,
@@ -22,6 +23,15 @@ export class MessageController {
     @User('id') currentUserId: number,
     @Body('message') sendMessageDto: SendMessageDto,
   ) {
-    return await this.messageService.sendMessage(currentUserId, sendMessageDto);
+    await this.messageService.sendMessage(currentUserId, sendMessageDto);
+  }
+
+  @Get()
+  @UseGuards(AuthGuard)
+  async getMessages(
+    @User('id') currentUserId: number,
+    @Body('ticketId') ticketId: number,
+  ) {
+    return await this.messageService.getMessages(currentUserId, ticketId);
   }
 }
