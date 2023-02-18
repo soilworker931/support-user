@@ -45,6 +45,7 @@ export class TicketController {
   }
 
   @Put()
+  @UsePipes(new ValidationPipe())
   @UseGuards(AuthGuard)
   async updateTicketStatus(
     @Body('ticket') updateTicketStatusDto: UpdateTicketStatusDto,

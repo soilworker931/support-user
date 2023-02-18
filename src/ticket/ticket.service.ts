@@ -45,12 +45,6 @@ export class TicketService {
   async updateTicketStatus(
     updateTicketStatusDto: UpdateTicketStatusDto,
   ): Promise<TicketEntity> {
-    if (!Object.values(TicketStatus).includes(updateTicketStatusDto.status)) {
-      throw new HttpException(
-        'Incorret ticket status is provided',
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
-    }
     const ticket = await this.ticketRepository.findOneBy({
       id: updateTicketStatusDto.id,
     });
